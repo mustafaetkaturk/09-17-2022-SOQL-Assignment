@@ -1,0 +1,27 @@
+At first, I thought this: 
+SELECT Account.Name, Account.Rating, Name, Department, Title, 
+       (SELECT Casenumber, Subject FROM Case WHERE IsClosed) 
+FROM Contact 
+WHERE Account.Rating='HOT' AND Department='Technology' ORDER BY Name DESC
+
+It did not work, so, I check the field names and they are all correct but IsClosed doesn't exist: 
+SELECT Account.Name, Account.Rating, Name, Department, Title, 
+        (SELECT Casenumber, Subject FROM Case) 
+FROM Contact 
+WHERE Account.Rating='HOT' AND Department='Technology' ORDER BY Name DESC
+
+This did not work either, so, I took out the case part totally: 
+SELECT Account.Name, Account.Rating, Name, Department, Title 
+FROM Contact 
+WHERE Account.Rating='HOT' AND Department='Technology' ORDER BY Name DESC
+
+So, it worked. Now I know where the problem is. I did my research and learned that Case should be Cases: 
+SELECT Account.Name, Account.Rating, Name, Department, Title, 
+        (SELECT Casenumber, Subject FROM Cases) 
+FROM Contact WHERE Account.Rating='HOT' AND Department='Technology' ORDER BY Name DESC
+
+This worked too. Now instead of creating Isclosed Checkbox, I tried this: 
+SELECT Account.Name, Account.Rating, Name, Department, Title, 
+        (SELECT Casenumber, Subject FROM Cases WHERE status!='Closed' ) 
+FROM Contact 
+WHERE Account.Rating='HOT' AND Department='Technology' ORDER BY Name DESC
